@@ -25,6 +25,11 @@ function App() {
 	const handleCounterPlus = (index) => {
 		const newTab = [...tab];
 		newTab[index].counter++;
+		newTab[index].basketPrice = Math.round(
+			newTab[index].meal.price * newTab[index].counter,
+			2
+		);
+
 		setTab(newTab);
 	};
 
@@ -33,6 +38,10 @@ function App() {
 
 		if (newTab[index].counter > 1) {
 			newTab[index].counter--;
+			newTab[index].basketPrice = Math.round(
+				newTab[index].meal.price * newTab[index].counter,
+				2
+			);
 		} else {
 			newTab.splice(index, 1);
 		}
@@ -54,22 +63,20 @@ function App() {
 					<main>
 						<section className="grandContainer">
 							<div className="first">
-								<h1>{data.restaurant.name}</h1>
-								<p>{data.restaurant.description}</p>
+								<h1> {data.restaurant.name} </h1>
+								<p> {data.restaurant.description} </p>
 							</div>
-
 							<div className="second">
 								<img src={data.restaurant.picture} alt="" />
 							</div>
 						</section>
-
 						<section className="containerMain">
 							<section className="container2">
 								{data.categories.map(
 									(cat, index) =>
 										cat.meals.length > 1 && (
 											<section className="containerCat">
-												<h1>{cat.name}</h1>
+												<h1> {cat.name} </h1>
 												<section>
 													{cat.meals.map((meal, index) => {
 														return (
@@ -85,48 +92,63 @@ function App() {
 											</section>
 										)
 								)}
-
-								<div>
-									<p>reztgehg</p>
-								</div>
 							</section>
 							<section className="panier">
 								<div className="suPanier">
 									<div className="boutonPanier">
-										<button>Valider mon panier</button>
+										<button
+											disabled={tab.length >= 1 ? false : true}
+											style={{
+												backgroundColor:
+													tab.length >= 1 ? "#00CDBD" : "#bac3c3",
+											}}
+										>
+											Valider mon panier
+										</button>
 									</div>
-									<div className="textPanier">
-										{tab.map((elem, index) => {
-											return (
-												<div className="icon-meal" key={index}>
-													<div>
-														<span
-															className="icon"
-															onClick={() => {
-																handleCounterMoins(index);
-															}}
-														>
-															<FontAwesomeIcon icon={faMinus} />
-														</span>
-														<span>{elem.counter}</span>
-														<span
-															className="icon"
-															onClick={() => {
-																handleCounterPlus(index);
-															}}
-														>
-															<FontAwesomeIcon icon={faPlus} />
-														</span>
-														<span className="meal">{elem.meal.title}</span>
+									{tab.length >= 1 ? (
+										<div className="textPanier">
+											{tab.map((elem, index) => {
+												return (
+													<div className="icon-meal" key={index}>
+														<div>
+															<span
+																className="icon"
+																onClick={() => {
+																	handleCounterMoins(index);
+																}}
+															>
+																<FontAwesomeIcon icon={faMinus} />
+															</span>
+															<span> {elem.counter} </span>
+															<span
+																className="icon"
+																onClick={() => {
+																	handleCounterPlus(index);
+																}}
+															>
+																<FontAwesomeIcon icon={faPlus} />
+															</span>
+															<span className="meal"> {elem.meal.title} </span>
+														</div>
+														<div>
+															<span className="price">
+																{" "}
+																{elem.basketPrice}€{" "}
+															</span>
+														</div>
 													</div>
+												);
+											})}
+											<hr style={{ height: 1, width: "100%" }} />
 
-													<div>
-														<span className="price"> {elem.meal.price}€</span>
-													</div>
-												</div>
-											);
-										})}
-									</div>
+											<hr style={{ height: 1, width: "100%" }} />
+
+											<hr style={{ height: 1, width: "100%" }} />
+										</div>
+									) : (
+										<p>Le panier est vide</p>
+									)}
 								</div>
 							</section>
 						</section>

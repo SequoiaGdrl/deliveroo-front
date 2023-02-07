@@ -9,11 +9,15 @@ const Card = ({ index, meal, tab, setTab }) => {
 			onClick={() => {
 				const newTab = [...tab];
 
-				const mealExist = newTab.find((elem) => elem.meal.title == meal.title);
+				const mealExist = newTab.find((elem) => elem.meal.title === meal.title);
 				if (mealExist) {
 					mealExist.counter++;
+					mealExist.basketPrice = Math.round(
+						mealExist.meal.price * mealExist.counter,
+						2
+					);
 				} else {
-					newTab.push({ meal: meal, counter: 1 });
+					newTab.push({ meal: meal, counter: 1, basketPrice: meal.price });
 				}
 
 				setTab(newTab);
