@@ -10,7 +10,7 @@ function App() {
 	const [data, setData] = useState();
 	const [isLoading, setIsLoading] = useState(true);
 	const [tab, setTab] = useState([]);
-
+	let total = 0;
 	useEffect(() => {
 		const getData = async () => {
 			const response = await axios.get(
@@ -109,6 +109,7 @@ function App() {
 									{tab.length >= 1 ? (
 										<div className="textPanier">
 											{tab.map((elem, index) => {
+												total += Math.floor(elem.basketPrice);
 												return (
 													<div className="icon-meal" key={index}>
 														<div>
@@ -141,10 +142,10 @@ function App() {
 												);
 											})}
 											<hr style={{ height: 1, width: "100%" }} />
-
+											<p>Sous Total : {total} €</p>
+											<p>Frais de livraison : 2.5 €</p>
 											<hr style={{ height: 1, width: "100%" }} />
-
-											<hr style={{ height: 1, width: "100%" }} />
+											<p>Total : {total + 2.5} €</p>
 										</div>
 									) : (
 										<p>Le panier est vide</p>
